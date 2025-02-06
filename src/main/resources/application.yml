@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: BankAccountWithdrawal
+  datasource:
+    url: jdbc:mysql://localhost:3306/bankdb
+    username:
+    password:
+aws:
+  sns:
+    topicArn: arn:aws:sns:af-south-1:123456789012:MyTopic // Topic Example
