@@ -61,6 +61,6 @@ business logic.
    8. Lack of testability.
 
 ### In summary 
-    this is the structure that i would use separating layers, encapsulation, moularity 
+    This is the structure that i would use separating layers, encapsulation, moularity 
     scalability, testing, decoupling and etc. there is also the Hexagon architecture that we can use 
     depending on the organization.
