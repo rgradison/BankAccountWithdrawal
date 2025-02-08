@@ -1,0 +1,85 @@
+.
+├── HELP.md
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+├── README.md
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── io
+│   │   │       └── sanlam
+│   │   │           └── bankaccountwithdrawal
+│   │   │               ├── BankAccountWithdrawalApplication.java
+│   │   │               ├── configs
+│   │   │               │   └── AwsConfig.java
+│   │   │               ├── controller
+│   │   │               │   └── BankAccountController.java
+│   │   │               ├── event
+│   │   │               │   ├── EventPublisher.java
+│   │   │               │   └── WithdrawalEvent.java
+│   │   │               ├── exception
+│   │   │               │   ├── GlobalExceptionHandler.java
+│   │   │               │   └── InsufficientFundsException.java
+│   │   │               ├── repository
+│   │   │               │   └── BankAccountRepository.java
+│   │   │               └── service
+│   │   │                   └── BankAccountService.java
+│   │   └── resources
+│   │       ├── application.yml
+│   │       ├── static
+│   │       └── templates
+│   └── test
+│       └── java
+│           └── io
+│               └── sanlam
+│                   └── bankaccountwithdrawal
+│                       └── BankAccountWithdrawalApplicationTests.java
+├── structure.txt
+└── target
+    ├── BankAccountWithdrawal-0.0.1-SNAPSHOT.jar
+    ├── BankAccountWithdrawal-0.0.1-SNAPSHOT.jar.original
+    ├── classes
+    │   ├── application.yml
+    │   └── io
+    │       └── sanlam
+    │           └── bankaccountwithdrawal
+    │               ├── BankAccountWithdrawalApplication.class
+    │               ├── configs
+    │               │   └── AwsConfig.class
+    │               ├── controller
+    │               │   └── BankAccountController.class
+    │               ├── event
+    │               │   ├── event
+    │               │   │   └── EventPublisher.class
+    │               │   └── WithdrawalEvent.class
+    │               ├── exception
+    │               │   ├── GlobalExceptionHandler.class
+    │               │   └── InsufficientFundsException.class
+    │               ├── repository
+    │               │   └── BankAccountRepository.class
+    │               └── service
+    │                   └── BankAccountService.class
+    ├── generated-sources
+    │   └── annotations
+    ├── generated-test-sources
+    │   └── test-annotations
+    ├── maven-archiver
+    │   └── pom.properties
+    ├── maven-status
+    │   └── maven-compiler-plugin
+    │       ├── compile
+    │       │   └── default-compile
+    │       │       ├── createdFiles.lst
+    │       │       └── inputFiles.lst
+    │       └── testCompile
+    │           └── default-testCompile
+    │               ├── createdFiles.lst
+    │               └── inputFiles.lst
+    └── test-classes
+        └── io
+            └── sanlam
+                └── bankaccountwithdrawal
+                    └── BankAccountWithdrawalApplicationTests.class
+
+48 directories, 35 files
