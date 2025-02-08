@@ -51,7 +51,7 @@ business logic.
   * Dependency Injection
 
 ### Problems
-Tight coupling, snsClient is initialized directly in the constructor, difficult to test.
+   1. Tight coupling, snsClient is initialized directly in the constructor, difficult to test.
    2. Lacks separation of concern, service, repository etc.
    3. Hardcoded values. snsTopicarn etc.
    4. Error handling eg Global exceptions
