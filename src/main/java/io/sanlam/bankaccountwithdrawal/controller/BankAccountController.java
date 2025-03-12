@@ -1,9 +1,7 @@
 package io.sanlam.bankaccountwithdrawal.controller;
 
-import io.sanlam.bankaccountwithdrawal.exception.InsufficientFundsException;
 import io.sanlam.bankaccountwithdrawal.service.BankAccountService;
 import org.slf4j.*;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
@@ -29,18 +27,10 @@ public class BankAccountController {
         logger.info("Initiating withdrawal for account: {}, amount: {}", accountId, amount);
         Map<String, Object> response = new HashMap<>();
 
-        try {
-            bankAccountService.withdraw(accountId, amount);
-            response.put("Message", "Withdrawal successful");
-            return ResponseEntity.ok(response);
-        } catch(InsufficientFundsException e) {
-            logger.warn("Insufficient funds for withdrawal");
-            response.put("Error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        } catch(Exception e){
-            logger.warn("Withdrawal failed ");
-            response.put("Error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
+        bankAccountService.withdraw(accountId, amount);
+
+        response.put("Message", "Withdrawal successful");
+
+        return ResponseEntity.ok(response);
     }
 }

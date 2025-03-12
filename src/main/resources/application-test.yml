@@ -67,3 +67,4 @@ management:
     metrics:
       tags:
         application: "MySpringApp"
+  profiles.active: test

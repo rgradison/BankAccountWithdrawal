@@ -42,7 +42,7 @@ business logic.
   * service, for our business logic
   * event, for event entities
   * exception, for handling exception
-  * repository, for database connection
+  * repository, fobr database connection
   * structure.txt in the root of the project
   * Config
   * .yml file for the app properties.
