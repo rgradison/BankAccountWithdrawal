@@ -34,6 +34,10 @@ spring:
       database-platform: org.hibernate.dialect.MySQLDialect  # MySQLDialect for MySQL
       hibernate:
         ddl-auto: update  # Hibernate DDL auto-update for development (use "validate" or "none" in production)
+  mvc:
+    throw-exception-if-no-handler-found: true
+    resources:
+      add-mappings: false
 aws:
   sns:
     topicArn: arn:aws:sns:af-south-1:123456789012:MyTopic  # Optional AWS SNS topic ARN
