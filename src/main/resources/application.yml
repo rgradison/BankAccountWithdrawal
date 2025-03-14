@@ -1,73 +1,83 @@
 server:
-  port: 8097  # Application server port
-# Set database connection details
+  port: 8097  #Application server port
+#Set database connection details
 db:
-  host: ${DB_HOST:localhost}  # Default host is localhost
-  port: ${DB_PORT:3306}       # Default port is 3306
+  host: ${DB_HOST}  #Default host is localhost
+  port: ${DB_PORT}  #Default port is 3306
   connection:
-    jdbcUrl: jdbc:mysql://${db.host}:${db.port}/BankAccountWithdrawal  # JDBC URL using placeholders for host and port
-    username: ${DB_USERNAME:root}  # Externalized username (use environment variable DB_USERNAME if available)
-    # password: ${DB_PASSWORD:secret}  # Omit if no password is needed
+    jdbcUrl: jdbc:mysql://${DB_HOST}:${DB_PORT}/BankAccountWithdrawal  #JDBC URL using placeholders for host and port
+    username: ${DB_USERNAME}  #Externalized username (use environment variable DB_USERNAME if available)
+    #password: ${DB_PASSWORD} #Omit if no password is needed
 spring:
   application:
-    name: BankAccountWithdrawal  # Application name
+    name: BankAccountWithdrawal  #Application name
+#Security
   security:
     user:
-      name: admin
-      password: admin123  # Change in production!
-  cloud:  # Optionally, enable retry for resilience
+      name: ${ADMIN_USERNAME}
+      password: ${ADMIN_PASSWORD}  #Change in production!
+  cloud:  #Optionally, enable retry for resilience
     config:
       retry:
-        enabled: true  # Retry enabled for resilience
+        enabled: true  #Retry enabled for resilience
   datasource:
-    url: jdbc:mysql://${db.host}:${db.port}/BankAccountWithdrawal  # JDBC URL for MySQL database
-    username: ${DB_USERNAME:root}  # Use externalized username (environment variable DB_USERNAME)
-    # password: ${DB_PASSWORD}  # No password since DB does not require one
-    driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL driver
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/BankAccountWithdrawal  #JDBC URL for MySQL database
+    username: ${DB_USERNAME}  #Use externalized username (environment variable DB_USERNAME)
+    password: ${DB_PASSWORD}  #Yes password since DB does not require one
+    driver-class-name: com.mysql.cj.jdbc.Driver  #MySQL driver
     hikari:
       connection-timeout: 30000  # Connection timeout in milliseconds
-      maximum-pool-size: 10  # Maximum number of connections in the pool
-      minimum-idle: 10  # Minimum idle connections in the pool
-      idle-timeout: 30000  # Idle timeout in milliseconds
-      max-lifetime: 600000  # Max lifetime for a connection in milliseconds
+      maximum-pool-size: 20  # Maximum number of connections in the pool, # Increased pool size for handling concurrent connections
+      minimum-idle: 5  # Minimum idle connections in the pool
+      idle-timeout: 60000  # Idle timeout in milliseconds, # 1 min idle timeout
+      max-lifetime: 1800000  # Max lifetime for a connection in milliseconds, # 30 min max lifetime
     jpa:
       database-platform: org.hibernate.dialect.MySQLDialect  # MySQLDialect for MySQL
       hibernate:
-        ddl-auto: update  # Hibernate DDL auto-update for development (use "validate" or "none" in production)
+        ddl-auto: validate  # Hibernate DDL auto-update for development (use "validate" or "none" in production)
   mvc:
     throw-exception-if-no-handler-found: true
     resources:
       add-mappings: false
+##AWS SNS Configuration
 aws:
   sns:
-    topicArn: arn:aws:sns:af-south-1:123456789012:MyTopic  # Optional AWS SNS topic ARN
+    topicArn: ${AWS_SNS_TOPIC_ARN:arn:aws:sns:af-south-1:123456789012:MyTopic} #arn:aws:sns:af-south-1:123456789012:MyTopic  # Optional AWS SNS topic ARN
 logging:
   level:
-    org:
-      springframework:
-        jdbc: INFO  # Set logging level for Spring JDBC to INFO for production
+    org.springframework: WARN  # Reduced log verbosity for production
+    org.springframework.jdbc: INFO  # Set logging level for Spring JDBC to INFO for production
+##Resilience4j Configuration
 resilience4j:
   retry:
     instances:
       withdrawRetry:
+        maxAttempts: 5
+        waitDuration: 1s
+      databaseRetry:
         maxAttempts: 3
         waitDuration: 500ms
+        retryExceptions:
+          - java.sql.SQLException
+        ignoreExceptions:
+          - java.lang.IllegalArgumentException
   circuitbreaker:
     instances:
       withdrawCircuitBreaker:
         failureRateThreshold: 50
-        waitDurationInOpenState: 10000ms
-        slidingWindowSize: 5
+        waitDurationInOpenState: 15000ms
+        slidingWindowSize: 10
+##Actuator (Monitoring)
 management:
   endpoints:
     web:
       exposure:
-        include: "*" #Not recommended in production, just for testing locally.
+        include: "health,info"  # Limited to critical endpoints
   endpoint:
     health:
-      show-details: "always"
+      show-details: "when_authorized" # "always"
     shutdown:
-      enabled: true
+      enabled: false  # Disable shutdown endpoint in production
     metrics:
       tags:
         application: "BankAccountWithdrawal"

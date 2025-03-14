@@ -1,5 +1,6 @@
 package io.sanlam.bankaccountwithdrawal.service;
 
+import io.github.resilience4j.retry.annotation.Retry;
 import io.sanlam.bankaccountwithdrawal.event.WithdrawalEvent;
 import io.sanlam.bankaccountwithdrawal.event.EventPublisher;
 import io.sanlam.bankaccountwithdrawal.exception.InsufficientFundsException;
@@ -21,6 +22,7 @@ public class BankAccountService {
     }
 
     @Transactional
+    @Retry(name = "databaseRetry", fallbackMethod = "fallbackResponse")
     public  void withdraw(Long accountId, BigDecimal amount) {
 
         // Fetch current balance
@@ -35,6 +37,8 @@ public class BankAccountService {
         bankAccountRepository.updateBalance(accountId,amount);
         WithdrawalEvent event = new WithdrawalEvent(amount,accountId,"SUCCESSFUL");
         eventPublisher.publishEvent(event);
-
+    }
+    public void fallbackResponse(Exception e) {
+        throw new RuntimeException("Database is currently unavailable, please try again later.");
     }
 }
