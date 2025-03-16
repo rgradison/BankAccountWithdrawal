@@ -1,25 +1,25 @@
 server:
   port: 8097  #Application server port
 #Set database connection details
-db:
-  host: ${DB_HOST}  #Default host is localhost
-  port: ${DB_PORT}  #Default port is 3306
-  connection:
-    jdbcUrl: jdbc:mysql://${DB_HOST}:${DB_PORT}/BankAccountWithdrawal  #JDBC URL using placeholders for host and port
-    username: ${DB_USERNAME}  #Externalized username (use environment variable DB_USERNAME if available)
-    #password: ${DB_PASSWORD} #Omit if no password is needed
+#db:
+#  host: ${DB_HOST}  #Default host is localhost
+#  port: ${DB_PORT}  #Default port is 3306
+#  connection:
+#    jdbcUrl: jdbc:mysql://${DB_HOST}:${DB_PORT}/BankAccountWithdrawal  #JDBC URL using placeholders for host and port
+#    username: ${DB_USERNAME}  #Externalized username (use environment variable DB_USERNAME if available)
+#    #password: ${DB_PASSWORD} #Omit if no password is needed
 spring:
   application:
     name: BankAccountWithdrawal  #Application name
-#Security
-  security:
-    user:
-      name: ${ADMIN_USERNAME}
-      password: ${ADMIN_PASSWORD}  #Change in production!
+# Security # security.user is for Spring Boot’s default security (Basic Auth)
+    # security:
+    # user:
+    # name: ${SECURITY_USER_NAME}
+    # password: ${SECURITY_USER_PASSWORD}  #Change in production!
   cloud:  #Optionally, enable retry for resilience
     config:
       retry:
-        enabled: true  #Retry enabled for resilience
+        enabled: true  # Retry enabled for resilience
   datasource:
     url: jdbc:mysql://${DB_HOST}:${DB_PORT}/BankAccountWithdrawal  #JDBC URL for MySQL database
     username: ${DB_USERNAME}  #Use externalized username (environment variable DB_USERNAME)
@@ -31,10 +31,10 @@ spring:
       minimum-idle: 5  # Minimum idle connections in the pool
       idle-timeout: 60000  # Idle timeout in milliseconds, # 1 min idle timeout
       max-lifetime: 1800000  # Max lifetime for a connection in milliseconds, # 30 min max lifetime
-    jpa:
-      database-platform: org.hibernate.dialect.MySQLDialect  # MySQLDialect for MySQL
-      hibernate:
-        ddl-auto: validate  # Hibernate DDL auto-update for development (use "validate" or "none" in production)
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect # MySQLDialect for MySQL
+    hibernate:
+      ddl-auto: validate  # Hibernate DDL auto-update for development (use "validate" or "none" in production)
   mvc:
     throw-exception-if-no-handler-found: true
     resources:
@@ -42,11 +42,12 @@ spring:
 ##AWS SNS Configuration
 aws:
   sns:
-    topicArn: ${AWS_SNS_TOPIC_ARN:arn:aws:sns:af-south-1:123456789012:MyTopic} #arn:aws:sns:af-south-1:123456789012:MyTopic  # Optional AWS SNS topic ARN
+    topicArn: ${AWS_SNS_TOPIC_ARN:-arn:aws:sns:af-south-1:123456789012:MyTopic}
 logging:
   level:
     org.springframework: WARN  # Reduced log verbosity for production
     org.springframework.jdbc: INFO  # Set logging level for Spring JDBC to INFO for production
+    com.zaxxer.hikari: DEBUG
 ##Resilience4j Configuration
 resilience4j:
   retry:
@@ -67,7 +68,7 @@ resilience4j:
         failureRateThreshold: 50
         waitDurationInOpenState: 15000ms
         slidingWindowSize: 10
-##Actuator (Monitoring)
+# Actuator (Monitoring)
 management:
   endpoints:
     web:
