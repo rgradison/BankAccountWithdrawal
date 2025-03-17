@@ -2,10 +2,12 @@ package io.sanlam.bankaccountwithdrawal.repository;
 
 
 import io.sanlam.bankaccountwithdrawal.exception.DatabaseUpdateException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Repository
 public class BankAccountRepository {
@@ -16,9 +18,13 @@ public class BankAccountRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public BigDecimal getBalance(Long accountId) {
-        String sql = "select balance from account where id = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{accountId}, BigDecimal.class);
+    public Optional<BigDecimal> getBalance(Long accountId) {
+        String sql = "SELECT balance FROM account WHERE account_id = ?";
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, BigDecimal.class, accountId));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();  // Return empty if no record found
+        }
     }
 
     public boolean updateBalance(Long accountId, BigDecimal amount) {

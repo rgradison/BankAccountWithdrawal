@@ -24,6 +24,7 @@ public class WithdrawalEvent {
     }
 
     public String toJson(){
-        return String.format("{\"amount\":\"%s\",\"accountId\":\"%d\",\"status\":\"%s\"}");
+        return String.format("{\"amount\":\"%s\",\"accountId\":\"%d\",\"status\":\"%s\"}",
+                amount.toString(), accountId, status);
     }
 }

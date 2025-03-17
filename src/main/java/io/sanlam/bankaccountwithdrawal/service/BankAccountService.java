@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 public class BankAccountService {
@@ -27,10 +28,10 @@ public class BankAccountService {
     public  void withdraw(Long accountId, BigDecimal amount) {
 
         // Fetch current balance
-        BigDecimal currentBalance = bankAccountRepository.getBalance(accountId);
+        Optional<BigDecimal> currentBalance = bankAccountRepository.getBalance(accountId);
 
         // Insufficient funds
-        if(currentBalance == null || currentBalance.compareTo(amount) < 0) {
+        if(currentBalance.isEmpty() || currentBalance.get().compareTo(amount) < 0) {
             // Publish and throw event for insufficient funds
             WithdrawalEvent event = new WithdrawalEvent(amount, accountId, "FAILED: Insufficient Funds");
             eventPublisher.publishEvent(event);
