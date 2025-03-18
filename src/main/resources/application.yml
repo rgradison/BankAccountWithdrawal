@@ -1,21 +1,9 @@
 server:
   port: 8097  #Application server port
-#Set database connection details
-#db:
-#  host: ${DB_HOST}  #Default host is localhost
-#  port: ${DB_PORT}  #Default port is 3306
-#  connection:
-#    jdbcUrl: jdbc:mysql://${DB_HOST}:${DB_PORT}/BankAccountWithdrawal  #JDBC URL using placeholders for host and port
-#    username: ${DB_USERNAME}  #Externalized username (use environment variable DB_USERNAME if available)
-#    #password: ${DB_PASSWORD} #Omit if no password is needed
+## Spring configs
 spring:
   application:
     name: BankAccountWithdrawal  #Application name
-# Security # security.user is for Spring Boot’s default security (Basic Auth)
-    # security:
-    # user:
-    # name: ${SECURITY_USER_NAME}
-    # password: ${SECURITY_USER_PASSWORD}  #Change in production!
   cloud:  #Optionally, enable retry for resilience
     config:
       retry:
@@ -72,7 +60,7 @@ resilience4j:
         failureRateThreshold: 50
         waitDurationInOpenState: 15000ms
         slidingWindowSize: 10
-# Actuator (Monitoring)
+## Actuator (Monitoring)
 management:
   endpoints:
     web:
