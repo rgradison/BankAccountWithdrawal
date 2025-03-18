@@ -27,4 +27,5 @@ public class WithdrawalEvent {
         return String.format("{\"amount\":\"%s\",\"accountId\":\"%d\",\"status\":\"%s\"}",
                 amount.toString(), accountId, status);
     }
+
 }
