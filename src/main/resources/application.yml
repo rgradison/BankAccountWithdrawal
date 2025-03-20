@@ -1,5 +1,5 @@
 server:
-  port: 8097  #Application server port
+  port: ${SERVER_PORT:8097}  # Default to 8080 if SERVER_PORT is not set
 ## Spring configs
 spring:
   application:
@@ -27,11 +27,10 @@ spring:
     throw-exception-if-no-handler-found: true
     resources:
       add-mappings: false
-##JWT Configuration
-jwt:
-  secret: ${JWT_SECRET_KEY} # We can still use Hashicorp vault or AWS secret manager,Azure Key Vault and Kubernetes Secrets
-  expirationMs: 157784630000  # 6 months
-##AWS SNS Configuration
+## JWT Configuration
+JWT_SECRET: ${JWT_SECRET}  # We can still use Hashicorp vault or AWS secret manager,Azure Key Vault and Kubernetes Secrets
+expirationMs: 157784630000  # 6 months
+## AWS SNS Configuration
 aws:
   sns:
     topicArn: ${AWS_SNS_TOPIC_ARN:-arn:aws:sns:af-south-1:123456789012:MyTopic}
