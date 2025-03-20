@@ -10,11 +10,13 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-
+    //JWT_SECRET is a private key used to sign and verify tokens.
     private final SecretKey jwtsecretkey;
-    private static final long EXPIRATION_TIME = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds (604800000)
+    // 7 days in milliseconds (604800000)
+    private static final long EXPIRATION_TIME = 7 * 24 * 60 * 60 * 1000;
 
     public JwtUtil() {
+        //Not recommended for production
         // Load .env file and set system properties
         Dotenv dotenv = Dotenv.load();
         dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));

@@ -14,11 +14,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (!"testUser".equals(username)) {
             throw new UsernameNotFoundException("User not found");
         }
-
         return User.withUsername(username)
                 .password("$2a$10$kj62f9xc.KqCpj5z9mEO7.XbURICoo.ccxyipNdKojWlYfelHWez6") // Hashed password
                 .roles("USER")
                 .build();
     }
-
 }
