@@ -58,34 +58,55 @@ public class KafkaProducerConfig {
     }
 }
 
-// Replaces sns
-/*import jakarta.annotation.PreDestroy;
-import org.springframework.beans.factory.annotation.Value;
+/*
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import software.amazon.awssdk.http.urlconnection.UrlConnectionHttpClient;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sns.SnsClient;
+import software.amazon.awssdk.regions.Region;
+
+import javax.annotation.PreDestroy;
 
 @Configuration
 public class AwsConfig {
 
+    private static final Logger logger = LoggerFactory.getLogger(AwsConfig.class);
+
     private SnsClient snsClient;
+
+    */
+/**
+     * Create and configure an SNS client. This method returns a singleton instance of SnsClient.
+     *//*
 
     @Bean
     public SnsClient snsClient() {
-        this.snsClient = SnsClient.builder().
-                region(Region.AF_SOUTH_1).
-                build();
-        return this.snsClient;
+        if (snsClient == null) {
+            // Ensure only one instance of snsClient is created
+            snsClient = SnsClient.builder()
+                    .region(Region.of(System.getenv("AWS_REGION")))  // Use environment variable for flexibility
+                    .build();
+            logger.info("SnsClient created successfully.");
+        }
+        return snsClient;
     }
 
+    */
+/**
+     * Gracefully shutdown the SNS client during application termination.
+     * This ensures that resources are freed and connections are closed.
+     *//*
+
     @PreDestroy
-    public void shutdown(){
-        if (this.snsClient != null) {
-            this.snsClient.close();
-            System.out.println("SnsClient closed successfully");
+    public void shutdown() {
+        if (snsClient != null) {
+            try {
+                snsClient.close();
+                logger.info("SnsClient closed successfully.");
+            } catch (Exception e) {
+                logger.error("Error closing SnsClient: ", e);
+            }
         }
     }
 }*/

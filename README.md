@@ -57,7 +57,7 @@ business logic.
    4. Error handling eg Global exceptions
    5. Missing logging
    6. Code duplication, Repeated use of sql
-   7. Non-atomic operation, transaction man.
+   7. Non-atomic operation, transaction management.
    8. Lack of testability.
 
 ### In summary 
