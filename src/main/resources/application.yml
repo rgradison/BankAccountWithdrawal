@@ -1,13 +1,19 @@
 server:
   port: ${SERVER_PORT}
 ## AWS SNS Configuration
-aws:
-  sns:    # The output will show an ARN (Amazon Resource Name) for the topic
-    topicArn: ${AWS_SNS_TOPIC_ARN}
-  region: ${AWS_REGION}
+#aws:
+#  sns: # The output will show an ARN (Amazon Resource Name) for the topic
+#    topicArn: ${AWS_SNS_TOPIC_ARN}
+#  region: ${AWS_REGION}
 ## kafka Config
 kafka:
-  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}  # Or your Kafka broker URL
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}  # Or Kafka broker URL
+  topic:
+    name: ${KAFKA_TOPIC_NAME} # Should have been sns ${AWS_SNS_TOPIC_ARN}
+  producer:
+    retries: ${KAFKA_PRODUCER_RETRIES}
+    batch-size: ${KAFKA_PRODUCER_BATCH_SIZE}
+    linger-ms: ${KAFKA_PRODUCER_LINGER_MS}
 ## Spring configs
 spring:
   application:
@@ -71,7 +77,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,info"  # Limited to critical endpoints
+        include: "metrics,health,info"  # Limited to critical endpoints
   endpoint:
     health:
       show-details: "when_authorized" # "always"
@@ -80,3 +86,6 @@ management:
     metrics:
       tags:
         application: "BankAccountWithdrawal"
+        export:
+          prometheus:
+            enabled: true

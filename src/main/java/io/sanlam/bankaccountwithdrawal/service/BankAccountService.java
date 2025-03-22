@@ -51,11 +51,9 @@ public class BankAccountService {
             eventPublisher.publishEvent(event);
             throw new DatabaseUpdateException("Failed to update balance for account: " + accountId);
         }
-
     }
 
     public void fallbackResponse(Exception e) {
         throw new RuntimeException("Database is currently unavailable, please try again later.");
     }
-
 }

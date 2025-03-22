@@ -1,4 +1,4 @@
-package io.sanlam.bankaccountwithdrawal.jwt;
+package io.sanlam.bankaccountwithdrawal.utils;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
