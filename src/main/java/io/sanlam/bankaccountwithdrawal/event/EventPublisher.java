@@ -1,12 +1,14 @@
 package io.sanlam.bankaccountwithdrawal.event;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.concurrent.CompletableFuture;
 
 @Component
@@ -23,48 +25,27 @@ public class EventPublisher {
         this.kafkaTopic = kafkaTopic;
     }
 
-    public void publishEvent(WithdrawalEvent event) {
-        String eventJson = event.toJson();  // Convert event to JSON
+    public void publishEvent(WithdrawalEvent event, String topic) {
+        try {
+            // Serialize event object to JSON
+            String eventJson = new ObjectMapper().writeValueAsString(event);
 
-        CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(kafkaTopic, eventJson);
+            // Send event JSON to Kafka topic asynchronously
+            CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, eventJson);
 
-        future.whenComplete((sendResult, ex) -> {
-            if (ex != null) {
-                logger.error("❌ Failed to send event to Kafka: {}", ex.getMessage(), ex);
-            } else {
-                RecordMetadata metadata = sendResult.getRecordMetadata();
-                logger.info("✅ Successfully published event to Kafka: topic={}, partition={}, offset={}",
-                        metadata.topic(), metadata.partition(), metadata.offset());
-            }
-        });
+            future.whenComplete((sendResult, ex) -> {
+                if (ex != null) {
+                    // Log the error if sending the event to Kafka fails
+                    logger.error("❌ Failed to send event to Kafka: {}", ex.getMessage(), ex);
+                } else {
+                    // Log the successful event publishing to Kafka
+                    RecordMetadata metadata = sendResult.getRecordMetadata();
+                    logger.info("✅ Successfully published event to Kafka: topic={}, partition={}, offset={}",
+                            metadata.topic(), metadata.partition(), metadata.offset());
+                }
+            });
+        } catch (Exception e) {
+            logger.error("Error serializing event: {}", e.getMessage(), e);
+        }
     }
 }
-
-/*
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.sns.SnsClient;
-import software.amazon.awssdk.services.sns.model.PublishRequest;
-
-
-@Component
-public class EventPublisher {
-
-    private final SnsClient snsClient;
-    public final String snsTopicArn;
-
-    public EventPublisher(SnsClient snsClient, @Value("${aws.sns.topicArn}") String snsTopicArn) {
-        this.snsClient = snsClient;
-        this.snsTopicArn = snsTopicArn;
-    }
-
-    public void publishEvent(WithdrawalEvent event) {
-        String eventJson = event.toJson();
-        PublishRequest request = PublishRequest.builder().
-                                 message(eventJson).
-                                 topicArn(snsTopicArn).
-                                 build();
-        snsClient.publish(request);
-
-    }
-}*/

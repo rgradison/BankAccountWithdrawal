@@ -1,10 +1,22 @@
 server:
   port: ${SERVER_PORT}
-## AWS SNS Configuration
-#aws:
-#  sns: # The output will show an ARN (Amazon Resource Name) for the topic
-#    topicArn: ${AWS_SNS_TOPIC_ARN}
-#  region: ${AWS_REGION}
+## Swagger docs
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui/index.html
+    operationsSorter: method
+    tagsSorter: alpha
+  #show-actuator: true
+## AWS Config
+aws:
+  region: ${AWS_REGION}  # Can be changed per environment (e.g., dev, prod)
+  sns:
+    topic-arn: ${AWS_SNS_TOPIC_ARN} # ARN stands for Amazon Resource Name in AWS. eg arn:aws:sns:<region>:<account-id>:<topic-name>
+  endpoint: #http://localhost:4566
+  access-key: #test
+  secret-key: #test
 ## kafka Config
 kafka:
   bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}  # Or Kafka broker URL
@@ -14,6 +26,15 @@ kafka:
     retries: ${KAFKA_PRODUCER_RETRIES}
     batch-size: ${KAFKA_PRODUCER_BATCH_SIZE}
     linger-ms: ${KAFKA_PRODUCER_LINGER_MS}
+  consumer:
+    group-id: withdrawal-group
+    auto-offset-reset: earliest
+    enable-auto-commit: false
+    # Use StringDeserializer for key (assuming the key is a string)
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    # Use JsonDeserializer for value (assuming WithdrawalEvent is the value)
+    value-deserializer: org.springframework.kafka.core.GenericMessageListenerContainer$ListenerRunnable
+
 ## Spring configs
 spring:
   application:
@@ -49,6 +70,13 @@ expirationMs: 157784630000  # 6 months
 ## spring logging
 logging:
   level:
+    org:
+      springframework:
+        kafka= DEBUG
+    com:
+      sanlam:
+        bankaccountwithdrawal:
+          event=DEBUG:
     org.springframework: WARN  # Reduced log verbosity for production
     org.springframework.jdbc: INFO  # Set logging level for Spring JDBC to INFO for production
     com.zaxxer.hikari: DEBUG
@@ -74,10 +102,12 @@ resilience4j:
         slidingWindowSize: 10
 ## Actuator (Monitoring)
 management:
+  server:
+    port: ${SERVER_PORT}
   endpoints:
     web:
       exposure:
-        include: "metrics,health,info"  # Limited to critical endpoints
+        include: "metrics,health,info,actuator"  # Limited to critical endpoints
   endpoint:
     health:
       show-details: "when_authorized" # "always"

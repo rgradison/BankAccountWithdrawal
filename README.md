@@ -28,6 +28,11 @@ business logic.
       business logic.
 
 ### Implementation Choices
+###🔥 Best Practice for Production
+*  Use environment variables instead of hardcoding.
+*  Keep sensitive config out of source control (.gitignore .env, application.yml).
+*  Use a secrets manager (AWS Secrets Manager, Kubernetes Secrets, HashiCorp Vault, etc.).
+* A Spring Cloud Config Server is a great option for managing configurations dynamically, especially in production environments.
 *  **programming Language:** Java was chosen due to its robustness and widespread use in
    enterprise applications.
 *  **Framework:** Springboot was utilized streamline the development process and leverage its features for

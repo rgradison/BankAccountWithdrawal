@@ -1,6 +1,5 @@
 package io.sanlam.bankaccountwithdrawal.repository;
 
-
 import io.sanlam.bankaccountwithdrawal.exception.DatabaseUpdateException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;

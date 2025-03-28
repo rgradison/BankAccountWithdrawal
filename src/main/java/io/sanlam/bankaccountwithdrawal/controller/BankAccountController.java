@@ -1,6 +1,7 @@
 package io.sanlam.bankaccountwithdrawal.controller;
 
 import io.sanlam.bankaccountwithdrawal.service.BankAccountService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/bank")
+@Tag(name = "Banking Controller", description = "Handles banking transactions")
 public class BankAccountController {
 
     private static final Logger logger = LoggerFactory.getLogger(BankAccountController.class);
