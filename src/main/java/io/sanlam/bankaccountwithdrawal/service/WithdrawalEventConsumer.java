@@ -1,6 +1,7 @@
 package io.sanlam.bankaccountwithdrawal.service;
-//import com.eventstore.dbclient.*;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.sanlam.bankaccountwithdrawal.contract.WithdrawalEventListener;
 import io.sanlam.bankaccountwithdrawal.event.WithdrawalEvent;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.errors.SerializationException;
@@ -10,7 +11,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WithdrawalEventConsumer {
+public class WithdrawalEventConsumer implements WithdrawalEventListener {
 
     private static final Logger logger = LoggerFactory.getLogger(WithdrawalEventConsumer.class);
 
@@ -18,12 +19,13 @@ public class WithdrawalEventConsumer {
     private final ObjectMapper objectMapper;
 
     // Constructor ObjectMapper dependency injection
-    public WithdrawalEventConsumer(/*EventStoreDBClient eventStoreDBClient,*/ ObjectMapper objectMapper) {
+    public WithdrawalEventConsumer(ObjectMapper objectMapper) {
         logger.debug("WithdrawalEventConsumer constructor called.");
         this.objectMapper = objectMapper;
     }
 
     // Kafka listener for consuming withdrawal events
+    @Override
     @KafkaListener(topics = "withdrawal-events", groupId = "withdrawal-group")
     public void consume(ConsumerRecord<String, String> record) {
 
@@ -31,7 +33,7 @@ public class WithdrawalEventConsumer {
 
         try {
             // Deserialize JSON into WithdrawalEvent
-            WithdrawalEvent event = objectMapper.readValue(record.value(), WithdrawalEvent.class);
+            WithdrawalEvent event = deserializeEvent(record.value());
             logger.info("Event deserialized: {}", event);
 
         } catch (SerializationException e) {
@@ -42,12 +44,13 @@ public class WithdrawalEventConsumer {
     }
 
     // Deserialize the JSON string to a WithdrawalEvent object
-    private WithdrawalEvent deserializeEvent(String json) {
+    @Override
+    public WithdrawalEvent deserializeEvent(String json) {
         try {
             return objectMapper.readValue(json, WithdrawalEvent.class);
         } catch (Exception e) {
             logger.error("Failed to deserialize event: {}", e.getMessage());
-            throw new RuntimeException("Failed to deserialize event", e);
+            throw new RuntimeException("Failed to deserialize event.", e);
         }
     }
 }
