@@ -1,0 +1,91 @@
+Types of Proxies in Spring
+Proxy Type	When Used?	How It Works
+JDK Dynamic Proxy	If a class implements an interface	Uses Java’s built-in proxy mechanism (java.lang.reflect.Proxy)
+CGLIB Proxy	If a class does not have an interface	Uses CGLIB (Code Generation Library) to create a subclass
+
+Examples of Proxy Usage in Spring
+1️⃣ Transaction Management Proxy
+Spring wraps methods annotated with @Transactional inside a proxy. This ensures that database transactions begin and commit/rollback correctly.
+
+@Service
+public class PaymentService {
+
+    @Transactional
+    public void processPayment() {
+        System.out.println("Processing payment...");
+        // Spring creates a proxy to start and commit/rollback the transaction
+    }
+}
+➡️ How It Works:
+
+Spring creates a proxy around PaymentService.
+When processPayment() is called, the proxy starts a transaction before calling the method.
+If an exception occurs, it rolls back the transaction.
+2️⃣ AOP (Aspect-Oriented Programming) Proxies
+Spring AOP uses proxies to intercept method calls and add behavior like logging, security, or performance monitoring.
+
+Example: Logging Aspect with AOP
+
+@Aspect
+@Component
+public class LoggingAspect {
+
+    @Before("execution(* com.example.service.*.*(..))")
+    public void logMethodCall() {
+        System.out.println("Method is being called...");
+    }
+}
+➡️ How It Works:
+
+Spring creates a proxy around your service classes.
+Before executing a method, the proxy executes the logMethodCall() method.
+3️⃣ Security Proxies (Spring Security)
+Spring Security uses proxies to intercept method calls and check if the user has the right permissions.
+
+Example: Securing a Service Method
+
+@Service
+public class BankService {
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public void withdrawMoney() {
+        System.out.println("Withdrawing money...");
+    }
+}
+➡️ How It Works:
+
+A proxy intercepts the withdrawMoney() method.
+It checks if the user has the ADMIN role before allowing the method execution.
+4️⃣ Lazy Loading Proxy (Hibernate & JPA)
+Spring (via Hibernate) uses proxies for lazy-loaded entities to delay database queries until necessary.
+
+Example: Lazy-Loaded Entity
+
+@Entity
+public class Order {
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems;
+}
+➡️ How It Works:
+
+orderItems is not loaded from the database initially.
+When accessed, a proxy fetches the data only when needed.
+5️⃣ Caching Proxies
+Spring uses proxies to cache method results and avoid unnecessary computations.
+
+Example: Caching with @Cacheable
+
+@Service
+public class ProductService {
+
+    @Cacheable("products")
+    public Product getProductById(Long id) {
+        System.out.println("Fetching product from database...");
+        return new Product(id, "Laptop");
+    }
+}
+➡️ How It Works:
+
+A proxy checks the cache before executing getProductById().
+If the result is cached, it returns the cached value instead of calling the method.

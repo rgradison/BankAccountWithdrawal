@@ -1,0 +1,25 @@
+🔹 What Does Serializable Do in Java?
+Serializable is a marker interface in Java, found in java.io. It enables an object to be converted into a byte stream so it can be:
+
+Saved to a file
+Sent over a network
+Stored in a database
+Reconstructed later (deserialization)
+
+🔹 When Should You Use Serializable?
+✔ Use it when you need to store or transfer objects, such as:
+
+Caching objects in Redis
+Sending objects over Kafka or RabbitMQ
+Saving objects in files or databases
+Sending objects in a distributed system
+
+🔹 Summary
+Feature	Serializable
+Type	Marker interface
+Purpose	Enables object serialization & deserialization
+Methods	❌ No methods
+Requires serialVersionUID?	✅ Recommended
+Skips Fields?	✅ Yes, using transient
+Alternative?	Externalizable (for custom serialization)
+📌 Final Verdict: Serializable is useful for object persistence and transmission, but modern systems often use JSON or Protocol Buffers instead. 🚀

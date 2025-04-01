@@ -1,5 +1,12 @@
 server:
   port: ${SERVER_PORT}
+##Eureka config
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/ # Eureka Server URL
+  instance:
+    prefer-ip-address: true
 ## Swagger docs
 springdoc:
   api-docs:
@@ -8,7 +15,9 @@ springdoc:
     path: /swagger-ui/index.html
     operationsSorter: method
     tagsSorter: alpha
-  #show-actuator: true
+  swagger-ui.html:
+    path: /swagger-ui.html
+  show-actuator: true
 ## AWS Config
 aws:
   region: ${AWS_REGION}  # Can be changed per environment (e.g., dev, prod)

@@ -6,11 +6,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(
-        info = @Info(
-                title = "Bank Account Withdrawal",
-                version = "1.0",
-                description = "API documentation for Banking System"
+info = @Info(
+        title = "Bank Account Withdrawal",
+        version = "1.0",
+        description = "API documentation for Banking System"
         )
-)
+     )
 public class SwaggerConfig {
 }

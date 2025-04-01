@@ -1,0 +1,74 @@
+What is a HashMap in Java?
+A HashMap is a key-value pair data structure in Java that is part of the java.util package. It is an implementation of the Map interface and is based on hashing for fast data access.
+✅ Not thread-safe (use ConcurrentHashMap for multi-threading)
+✅ Unordered, meaning the order of insertion is not maintained
+ Allows null keys and multiple null values
+✅ Fast retrieval using hashing (O(1) average time complexity)
+
+A HashMap works by storing key-value pairs in an array of "buckets" using hashing.
+
+1.1️⃣ Hashing Mechanism
+When a key is inserted into the HashMap, it first computes a hash code using the hashCode() method of the key. The hash code is used to determine which bucket (index) the key-value pair should be stored in.
+
+int hash = key.hashCode();
+int index = hash % capacity;  // Capacity is the number of buckets
+
+22️⃣ Collision Handling (Separate Chaining)
+If multiple keys hash to the same index, Java handles this using linked lists (or balanced trees if needed). This is called separate chaining.
+
+If a collision occurs, a linked list is created at that index.
+If the linked list grows too large, Java converts it into a binary search tree (BST) for efficiency.
+
+33️⃣ Retrieval Process
+To retrieve a value using map.get(key), the following steps happen:
+
+Compute the hash of the key.
+Find the bucket index.
+Iterate over the linked list (if there are multiple entries due to collisions).
+Return the value of the matching key.
+
+import java.util.HashMap;
+
+public class HashMapExample {
+    public static void main(String[] args) {
+        // Create a HashMap
+        HashMap<String, Integer> map = new HashMap<>();
+
+        // Put key-value pairs
+        map.put("Alice", 25);
+        map.put("Bob", 30);
+        map.put("Charlie", 35);
+
+        // Retrieve a value
+        System.out.println("Alice's Age: " + map.get("Alice")); // Output: Alice's Age: 25
+
+        // Check if a key exists
+        System.out.println("Contains key 'Bob'? " + map.containsKey("Bob")); // true
+
+        // Remove a key
+        map.remove("Charlie");
+
+        // Iterate over keys and values
+        for (String key : map.keySet()) {
+            System.out.println(key + " -> " + map.get(key));
+        }
+    }
+}
+
+🔹 Time Complexity
+Operation	Best Case	Average Case	Worst Case
+put()	O(1)	O(1)	O(n) (if too many collisions)
+get()	O(1)	O(1)	O(n) (if too many collisions)
+remove()	O(1)	O(1)	O(n) (if too many collisions)
+
+🔹 Why O(1) in most cases?
+Because HashMap uses hashing, which directly finds the index for a key.
+Worst case (O(n)) happens when all keys collide, forming a linked list at one index.
+
+🔹 When to Use HashMap?
+✔ When you need fast lookups and inserts (O(1) on average).
+✔ When you need a key-value store where order doesn’t matter.
+❌ Don’t use it when you need thread-safety (use ConcurrentHashMap).
+❌ Don’t use it when order matters (use LinkedHashMap instead).
+
+Would you like me to explain HashMap vs. Hashtable vs. ConcurrentHashMap? 🚀

@@ -1,6 +1,9 @@
 package io.sanlam.bankaccountwithdrawal.controller;
 
 import io.sanlam.bankaccountwithdrawal.service.BankAccountService;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.*;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+@Hidden
 @RestController
 @RequestMapping("/bank")
 @Tag(name = "Banking Controller", description = "Handles banking transactions")
@@ -22,6 +26,8 @@ public class BankAccountController {
         this.bankAccountService = bankAccountService;
     }
 
+    @Operation(summary = "Withdraw money from the account.")
+    @ApiResponse(responseCode = "201",description = "Money withdrawn successfully.")
     @PostMapping("/withdraw")
     public ResponseEntity<Map<String, Object>> withdraw(@RequestParam("accountId") Long accountId,
                                                         @RequestParam("amount") BigDecimal amount) {

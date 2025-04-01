@@ -35,7 +35,6 @@ public class WithdrawalEventConsumer implements WithdrawalEventListener {
             // Deserialize JSON into WithdrawalEvent
             WithdrawalEvent event = deserializeEvent(record.value());
             logger.info("Event deserialized: {}", event);
-
         } catch (SerializationException e) {
             logger.error("Failed to deserialize event: {}", record.value(), e);
         } catch (Exception e) {

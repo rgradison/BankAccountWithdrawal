@@ -16,6 +16,16 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
+/*
+Proxies in Spring: What They Are and How They Work
+A proxy in Spring is an object that acts as a substitute for another object. Proxies allow Spring to add additional behavior, such as transaction management, security, caching, lazy loading, and AOP (Aspect-Oriented Programming), without modifying the actual class.
+
+Spring uses two main types of proxies:
+
+JDK Dynamic Proxies → Used when an interface is present.
+CGLIB Proxies → Used when there is no interface (works with concrete classes).
+*/
+
 @Service
 public class BankAccountService {
 

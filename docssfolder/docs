@@ -1,0 +1,23 @@
+Spring Boot 3 and Spring Framework 6 do not enforce using interfaces for service implementations, but they still fully support them. The reason many examples and tutorials omit interfaces is due to developer convenience and reduced boilerplate. However, using interfaces is still considered a best practice in large-scale applications. Here’s why:
+
+Why Interfaces Are Not Always Used in Spring Boot 3 & Spring 6?
+Simplified Code for Small Applications
+
+Many applications don't need multiple implementations of a service. If there's only one implementation, an interface might be unnecessary.
+Using a class directly reduces verbosity, making the code more readable and maintainable for simple projects.
+Spring's Enhanced Proxy Mechanism
+
+Spring can create proxies dynamically for transaction management, AOP, etc., without requiring an explicit interface.
+Spring 6 uses CGLIB-based proxies by default, allowing concrete classes to be proxied without needing interfaces.
+Records and Functional Programming
+
+Java 17+ encourages the use of records for immutable data structures and functional programming techniques, reducing the need for interface-based service layers.
+Spring Boot’s “Convention Over Configuration”
+
+The framework prefers simplicity and does not force interfaces unless they are necessary.
+When Should You Use Interfaces?
+While interfaces may not always be used, they are still valuable in enterprise applications where:
+✅ Multiple implementations of a service exist (e.g., EmailService with SMTPService and SESService).
+✅ You follow SOLID principles (Dependency Inversion Principle).
+✅ You want to mock dependencies easily for testing.
+✅ You work in a multi-module/microservices environment where services may evolve independently.

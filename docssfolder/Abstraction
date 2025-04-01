@@ -1,0 +1,12 @@
+1. Key Aspects of Abstraction in Java
+a. Achieving Abstraction
+In Java, abstraction can be implemented in two primary ways:
+
+Abstract Classes (abstract keyword) → Supports partial abstraction (0-100%).
+Interfaces (interface keyword) → Supports 100% abstraction in Java 8 and below (pre-default methods).
+b. When to Use Abstract Classes vs. Interfaces
+Feature	Abstract Class	Interface
+Method Implementation	Can have both abstract and concrete methods	Java 8+ allows default/static methods, but pre-Java 8 had only abstract methods
+Fields/Variables	Can have instance variables	Only public static final constants
+Inheritance	Supports single inheritance	Supports multiple inheritance
+Use Case	When you want a base class with shared functionality	When you want to enforce a contract across multiple unrelated classes
