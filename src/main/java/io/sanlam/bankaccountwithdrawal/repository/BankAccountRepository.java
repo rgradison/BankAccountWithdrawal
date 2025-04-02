@@ -17,24 +17,27 @@ public class BankAccountRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Optional<BigDecimal> getBalance(Long accountId) {
+    public Optional<BigDecimal> getBalance(Long account_id) {
+
         String sql = "SELECT balance FROM account WHERE account_id = ?";
+
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, BigDecimal.class, accountId));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, BigDecimal.class, account_id));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();  // Return empty if no record found
         }
     }
 
-    public boolean updateBalance(Long accountId, BigDecimal amount) {
+    public boolean updateBalance(Long account_id, BigDecimal amount) {
+
         String sql = "update accounts set balance = balance - ? where id = ?";
 
         try {
             // Execute the update query and get the number of rows affected
-            int rowsAffected = jdbcTemplate.update(sql, amount, accountId);
+            int rowsAffected = jdbcTemplate.update(sql, amount, account_id);
             // If no rows were affected, throw an exception
             if (rowsAffected == 0) {
-                throw new DatabaseUpdateException("Failed to update balance for account ID: " + accountId);
+                throw new DatabaseUpdateException("Failed to update balance for account ID: " + account_id);
             }
 
             // Return true if the update was successful (i.e., at least one row was affected)
@@ -42,8 +45,7 @@ public class BankAccountRepository {
 
         } catch (Exception e) {
             // If any other exception occurs, wrap it in a DatabaseUpdateException
-            throw new DatabaseUpdateException("Error updating balance for account ID: " + accountId, e);
+            throw new DatabaseUpdateException("Error updating balance for account ID: " + account_id, e);
         }
     }
-
 }

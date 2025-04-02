@@ -1,4 +1,4 @@
-package io.sanlam.bankaccountwithdrawal.contract;
+package io.sanlam.bankaccountwithdrawal.contractorport;
 
 import io.sanlam.bankaccountwithdrawal.event.WithdrawalEvent;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

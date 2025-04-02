@@ -1,7 +1,7 @@
 package io.sanlam.bankaccountwithdrawal.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.sanlam.bankaccountwithdrawal.contract.WithdrawalEventListener;
+import io.sanlam.bankaccountwithdrawal.contractorport.WithdrawalEventListener;
 import io.sanlam.bankaccountwithdrawal.event.WithdrawalEvent;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.errors.SerializationException;
