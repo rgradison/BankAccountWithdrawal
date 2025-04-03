@@ -1,0 +1,60 @@
+whats the dwfault cache in springboot?
+
+ChatGPT said:
+In Spring Boot, the default cache provider is ConcurrentHashMap-based caching, which is a simple in-memory cache implementation. This is used when you enable caching but don’t specify any caching provider.
+
+How Does the Default Cache Work?
+It stores cache data in memory using a ConcurrentHashMap, which provides thread-safe operations.
+
+The cache is non-persistent (data is lost when the application restarts).
+
+It is enabled automatically when you annotate methods with @Cacheable, @CachePut, or @CacheEvict.
+
+How to Enable the Default Cache?
+1️⃣ Add the @EnableCaching annotation in your Spring Boot application:
+
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@EnableCaching
+public class CacheConfig {
+}
+2️⃣ Use @Cacheable in your service method:
+
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ProductService {
+
+    @Cacheable("products")
+    public String getProductById(Long id) {
+        System.out.println("Fetching product from DB...");
+        return "Product " + id;
+    }
+}
+Where Is the Cache Stored?
+By default, Spring Boot uses SimpleCacheManager, which internally relies on ConcurrentHashMap. You can see this in action if you check:
+
+@Bean
+public CacheManager cacheManager() {
+    return new SimpleCacheManager();
+}
+Limitations of the Default Cache
+❌ No eviction policy – Data stays in memory until the app restarts.
+❌ Not suitable for distributed environments – Since it's in-memory, it doesn't work well across multiple instances.
+❌ Limited size – All cached data is stored in RAM, which may cause memory issues.
+
+Alternative Cache Providers (for better scalability)
+Ehcache (in-memory caching with eviction policies)
+
+Caffeine (high-performance caching)
+
+Redis (for distributed caching)
+
+Hazelcast (for distributed microservices caching)
+
+Infinispan (advanced caching for large-scale apps)
+
+Would you like help configuring a specific cache provider? 🚀

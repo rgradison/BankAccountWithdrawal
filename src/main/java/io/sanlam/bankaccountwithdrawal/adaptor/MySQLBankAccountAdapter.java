@@ -10,6 +10,8 @@ import java.util.Optional;
 @Component
 public class MySQLBankAccountAdapter implements BankAccountPort {
 
+    private static final Logger logger = LoggerFactory.getLogger(MySQLBankAccountAdapter.class);
+
     private final BankAccountRepository bankAccountRepository;
 
     public MySQLBankAccountAdapter(BankAccountRepository bankAccountRepository) {

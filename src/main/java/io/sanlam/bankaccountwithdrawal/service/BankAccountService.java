@@ -6,7 +6,6 @@ import io.sanlam.bankaccountwithdrawal.event.WithdrawalEvent;
 import io.sanlam.bankaccountwithdrawal.event.EventPublisher;
 import io.sanlam.bankaccountwithdrawal.exception.DatabaseUpdateException;
 import io.sanlam.bankaccountwithdrawal.exception.InsufficientFundsException;
-import io.sanlam.bankaccountwithdrawal.repository.BankAccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
