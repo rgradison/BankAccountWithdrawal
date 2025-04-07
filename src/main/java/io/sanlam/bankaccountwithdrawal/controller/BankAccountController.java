@@ -1,7 +1,6 @@
 package io.sanlam.bankaccountwithdrawal.controller;
 
 import io.sanlam.bankaccountwithdrawal.service.BankAccountService;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,7 +11,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-@Hidden
 @RestController
 @RequestMapping("/bank")
 @Tag(name = "Banking Controller", description = "Handles banking transactions")
@@ -40,5 +38,6 @@ public class BankAccountController {
         response.put("Message", "Withdrawal successful");
 
         return ResponseEntity.ok(response);
+
     }
 }

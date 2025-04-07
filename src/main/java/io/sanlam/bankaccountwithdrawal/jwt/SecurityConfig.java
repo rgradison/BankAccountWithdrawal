@@ -32,18 +32,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
-                .requestMatchers("/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()  // Allow OpenAPI docs
-                .requestMatchers("/swagger-ui.html", "/swagger-ui/**").permitAll()  // Allow Swagger UI
-                .requestMatchers("/actuator/**").permitAll()  // Allow actuator endpoints
-                .requestMatchers("/bank/withdraw").authenticated()  // Secure the /bank/withdraw endpoint
-                .anyRequest().authenticated()  // Secure all other endpoints
-            )
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .build();
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/api/auth/login", "/api/auth/register",
+                                "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/swagger-ui/index.html"
+                        ).permitAll()
+                        .requestMatchers("/actuator/**", "/bank/**").permitAll()
+                        .requestMatchers("/bank/withdraw").authenticated()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean
@@ -51,7 +52,7 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-            registry.addMapping("/v3/api-docs/**")
+            registry.addMapping("/v3/api-docs")
                 .allowedOrigins("http://localhost:8080", "http://localhost:8097")  // Adjust according to your Swagger UI URL
                 .allowedMethods("GET","POST","DELETE","PUT");
             }

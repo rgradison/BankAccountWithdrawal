@@ -12,11 +12,9 @@ springdoc:
   api-docs:
     enabled: true
   swagger-ui:
-    path: /swagger-ui/index.html
+    path: /swagger-ui.html
     operationsSorter: method
     tagsSorter: alpha
-  swagger-ui.html:
-    path: /swagger-ui.html
   show-actuator: true
 ## AWS Config
 aws:
